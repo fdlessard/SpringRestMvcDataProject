@@ -31,17 +31,17 @@ public class SalesOrderControllerIT {
     @Test
     public void testGetSalesOrder() throws Exception {
         when().
-                get("http://localhost:8080/RestSpringMvcJpaApp/salesorders/100").
-                then().statusCode(200).body("id", equalTo("200"));
+                get("http://localhost:8080/RestSpringMvcDataApp/salesorders/100").
+                then().statusCode(200).body("id", equalTo("100"));
         //contentType(ContentType.JSON);
     }
 
 
-    @Test
-    public void testGetAllSalesOrder() throws Exception  {
+
+    public void testGetAllSalesOrder() throws Exception {
 
         when().
-                get("http://localhost:8080/RestSpringMvcJpaApp/salesorders").
+                get("http://localhost:8080/RestSpringMvcDataApp/salesorders").
                 then().statusCode(200).body("id", equalTo("200"));
         //contentType(ContentType.JSON);
 

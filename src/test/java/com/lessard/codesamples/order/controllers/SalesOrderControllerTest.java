@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.lessard.codesamples.order.domain.SalesOrder;
-import com.lessard.codesamples.order.services.SalesOrderServiceImpl;
+import com.lessard.codesamples.order.services.SalesOrderService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +39,7 @@ public class SalesOrderControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private SalesOrderServiceImpl salesOrderService;
+    private SalesOrderService salesOrderService;
 
     private Date today = Calendar.getInstance().getTime();
 

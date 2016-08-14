@@ -39,7 +39,7 @@ public class SalesOrderServiceImplTest {
 
         salesOrderService = new SalesOrderServiceImpl(salesOrderRepository);
 
-        Mockito.when(salesOrderRepository.findByPrimaryKey(0l)).
+        Mockito.when(salesOrderRepository.findOne(0l)).
                 thenReturn(new SalesOrder(0l, 0l, "SalesOrder 0", today, new BigDecimal(10.00)));
 
         List<SalesOrder> salesOrderList = new ArrayList<SalesOrder>();
@@ -92,6 +92,6 @@ public class SalesOrderServiceImplTest {
     public void testUpdateSalesOrder() throws Exception {
 
         salesOrderService.updateSalesOrder( new SalesOrder(3l, 0l, "SalesOrder 3", today, new BigDecimal(10.00)));
-        verify(salesOrderRepository).update( new SalesOrder(3l, 0l, "SalesOrder 3", today, new BigDecimal(10.00)));
+        verify(salesOrderRepository).save( new SalesOrder(3l, 0l, "SalesOrder 3", today, new BigDecimal(10.00)));
     }
 }

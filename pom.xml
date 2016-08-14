@@ -34,6 +34,8 @@
         <mokito-all.version>1.10.19</mokito-all.version>
         <hamcrest-all.version>1.3</hamcrest-all.version>
         <spring.version>4.3.1.RELEASE</spring.version>
+        <spring-data-commons.version>1.12.2.RELEASE</spring-data-commons.version>
+        <spring-data-jpa.version>1.10.2.RELEASE</spring-data-jpa.version>
         <aspectj.version>1.8.9</aspectj.version>
         <hibernate-validator.version>5.2.4.Final</hibernate-validator.version>
         <jackson.version>2.8.1</jackson.version>
@@ -65,7 +67,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet-api.version}</version>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Unit testing related dependencies -->
@@ -135,7 +137,16 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
             <version>${spring.version}</version>
-
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <version>${spring-data-commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${spring-data-jpa.version}</version>
         </dependency>
 
         <!-- AspectJ related dependencies -->
@@ -267,7 +278,6 @@
                 <version>${maven-war-plugin.version}</version>
                 <configuration>
                     <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
-                    <webXml>${basedir}/src/main/webapp/WEB-INF/web.xml</webXml>
                     <failOnMissingWebXml>true</failOnMissingWebXml>
                 </configuration>
             </plugin>

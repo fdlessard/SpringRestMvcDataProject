@@ -1,27 +1,21 @@
-package com.lessard.codesamples.order;
+package com.lessard.codesamples.order.configurations;
 
-
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -32,19 +26,31 @@ import org.springframework.web.servlet.view.JstlView;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * Created by fdlessard on 16-08-14.
+ */
 @Configuration
 @EnableWebMvc
-@EnableTransactionManagement
+@EnableJpaRepositories("com.lessard.codesamples.order.repositories")
 @ComponentScan(basePackages = "com.lessard.codesamples.order")
-@EnableJpaRepositories(basePackages="com.lessard.codesamples.order.repositories")
-public class JpaTestConfiguration extends WebMvcConfigurerAdapter {
-
+public class ApplicationConfig extends WebMvcConfigurerAdapter {
 
     private static final String VIEW_RESOLVER_PREFIX = "/WEB-INF";
     private static final String VIEW_RESOLVER_SUFFIX = ".jsp";
 
+
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setViewClass(JstlView.class);
+        viewResolver.setPrefix(VIEW_RESOLVER_PREFIX);
+        viewResolver.setSuffix(VIEW_RESOLVER_SUFFIX);
+        registry.viewResolver(viewResolver);
+    }
+
+
     @Bean
-    public LocalContainerEntityManagerFactoryBean  entityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
         Properties jpaProperties = new Properties();
 
@@ -65,10 +71,10 @@ public class JpaTestConfiguration extends WebMvcConfigurerAdapter {
         jpaVendorAdapter.setDatabasePlatform("org.eclipse.persistence.platform.database.H2Platform");
         jpaVendorAdapter.setShowSql(true);
 
-        LocalContainerEntityManagerFactoryBean  entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean ();
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
         entityManagerFactoryBean.setDataSource(this.dataSource());
-        entityManagerFactoryBean.setPackagesToScan(new String[] {"com.lessard.codesamples.order"});
+        entityManagerFactoryBean.setPackagesToScan(new String[]{"com.lessard.codesamples.order"});
         entityManagerFactoryBean.setPersistenceUnitName("MyTestPU");
 
         entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
@@ -105,7 +111,6 @@ public class JpaTestConfiguration extends WebMvcConfigurerAdapter {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
-
     @Bean
     public DataSourceInitializer dataSourceInitializer() {
 
@@ -123,16 +128,15 @@ public class JpaTestConfiguration extends WebMvcConfigurerAdapter {
         return populator;
     }
 
-
-    @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
+    @Bean
+    public ViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix(VIEW_RESOLVER_PREFIX);
-        viewResolver.setSuffix(VIEW_RESOLVER_SUFFIX);
-        registry.viewResolver(viewResolver);
-    }
+        viewResolver.setPrefix("/WEB-INF/");
+        viewResolver.setSuffix(".jsp");
 
+        return viewResolver;
+    }
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {

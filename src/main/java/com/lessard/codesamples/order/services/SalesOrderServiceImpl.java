@@ -3,18 +3,21 @@ package com.lessard.codesamples.order.services;
 import com.lessard.codesamples.order.domain.SalesOrder;
 import com.lessard.codesamples.order.repositories.SalesOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 
 /**
  * Created by fdlessard on 16-07-29.
  */
-@Component
+@Service
 public class SalesOrderServiceImpl implements SalesOrderService {
 
     public static final String NULL_SALES_ORDER_MSG = "Null salesOrder";
     public static final String NULL_ID_MSG = "Null id";
 
+    @Resource
     private SalesOrderRepository salesOrderRepository;
 
 
@@ -43,7 +46,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             throw new IllegalArgumentException(NULL_ID_MSG);
         }
 
-        SalesOrder salesOrder = salesOrderRepository.findByPrimaryKey(id);
+        SalesOrder salesOrder = salesOrderRepository.findOne(id);
 
         return salesOrder;
     }
@@ -56,7 +59,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         return salesOrders;
     }
 
-
     @Override
     public void delete(Long id) {
 
@@ -65,7 +67,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         }
 
         salesOrderRepository.delete(id);
-
     }
 
     @Override
@@ -75,8 +76,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             throw new IllegalArgumentException(NULL_SALES_ORDER_MSG);
         }
 
-        salesOrderRepository.update(salesOrder);
-
+        salesOrderRepository.save(salesOrder);
     }
 
 }

@@ -25,7 +25,7 @@ import java.util.List;
 public class SalesOrderServiceIT {
 
     @Autowired
-    private SalesOrderServiceImpl salesOrderService;
+    private SalesOrderService salesOrderService;
 
     @Before
     public void setup() {
@@ -56,7 +56,5 @@ public class SalesOrderServiceIT {
         Assert.assertEquals(new BigDecimal(10.00),  salesOrder.getTotal());
 
     }
-
-
 
 }
