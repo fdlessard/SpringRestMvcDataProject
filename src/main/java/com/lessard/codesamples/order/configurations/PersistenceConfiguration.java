@@ -1,7 +1,6 @@
 package com.lessard.codesamples.order.configurations;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
@@ -15,13 +14,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -30,23 +23,10 @@ import java.util.Properties;
  * Created by fdlessard on 16-08-14.
  */
 @Configuration
-@EnableWebMvc
+@EnableTransactionManagement
 @EnableJpaRepositories("com.lessard.codesamples.order.repositories")
-@ComponentScan(basePackages = "com.lessard.codesamples.order")
-public class ApplicationConfig extends WebMvcConfigurerAdapter {
+public class PersistenceConfiguration {
 
-    private static final String VIEW_RESOLVER_PREFIX = "/WEB-INF";
-    private static final String VIEW_RESOLVER_SUFFIX = ".jsp";
-
-
-    @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix(VIEW_RESOLVER_PREFIX);
-        viewResolver.setSuffix(VIEW_RESOLVER_SUFFIX);
-        registry.viewResolver(viewResolver);
-    }
 
 
     @Bean
@@ -83,6 +63,7 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter {
 
         return entityManagerFactoryBean;
     }
+
 
     @Bean
     public DataSource dataSource() {
@@ -126,21 +107,6 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter {
         populator.setSqlScriptEncoding("UTF-8");
         populator.addScript(new ClassPathResource("data.sql"));
         return populator;
-    }
-
-    @Bean
-    public ViewResolver viewResolver() {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/");
-        viewResolver.setSuffix(".jsp");
-
-        return viewResolver;
-    }
-
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
     }
 
 }
