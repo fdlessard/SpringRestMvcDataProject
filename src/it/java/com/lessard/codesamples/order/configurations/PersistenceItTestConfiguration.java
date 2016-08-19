@@ -1,4 +1,4 @@
-package com.lessard.codesamples.order;
+package com.lessard.codesamples.order.configurations;
 
 
 import org.springframework.beans.factory.InitializingBean;
@@ -33,18 +33,14 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableWebMvc
+
 @EnableTransactionManagement
-@ComponentScan(basePackages = "com.lessard.codesamples.order")
 @EnableJpaRepositories(basePackages="com.lessard.codesamples.order.repositories")
-public class JpaTestConfiguration extends WebMvcConfigurerAdapter {
+public class PersistenceItTestConfiguration {
 
-
-    private static final String VIEW_RESOLVER_PREFIX = "/WEB-INF";
-    private static final String VIEW_RESOLVER_SUFFIX = ".jsp";
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean  entityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
         Properties jpaProperties = new Properties();
 
@@ -65,10 +61,10 @@ public class JpaTestConfiguration extends WebMvcConfigurerAdapter {
         jpaVendorAdapter.setDatabasePlatform("org.eclipse.persistence.platform.database.H2Platform");
         jpaVendorAdapter.setShowSql(true);
 
-        LocalContainerEntityManagerFactoryBean  entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean ();
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
         entityManagerFactoryBean.setDataSource(this.dataSource());
-        entityManagerFactoryBean.setPackagesToScan(new String[] {"com.lessard.codesamples.order"});
+        entityManagerFactoryBean.setPackagesToScan(new String[]{"com.lessard.codesamples.order"});
         entityManagerFactoryBean.setPersistenceUnitName("MyTestPU");
 
         entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
@@ -105,7 +101,6 @@ public class JpaTestConfiguration extends WebMvcConfigurerAdapter {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
-
     @Bean
     public DataSourceInitializer dataSourceInitializer() {
 
@@ -123,20 +118,6 @@ public class JpaTestConfiguration extends WebMvcConfigurerAdapter {
         return populator;
     }
 
-
-    @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix(VIEW_RESOLVER_PREFIX);
-        viewResolver.setSuffix(VIEW_RESOLVER_SUFFIX);
-        registry.viewResolver(viewResolver);
-    }
-
-
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
-
 }
+
+

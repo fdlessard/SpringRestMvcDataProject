@@ -1,7 +1,8 @@
 package com.lessard.codesamples.order.services;
 
 
-import com.lessard.codesamples.order.JpaTestConfiguration;
+import com.lessard.codesamples.order.configurations.PersistenceItTestConfiguration;
+import com.lessard.codesamples.order.configurations.WebMvcItTestConfiguration;
 import com.lessard.codesamples.order.domain.SalesOrder;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@ContextConfiguration(classes = { JpaTestConfiguration.class })
+@ContextConfiguration(classes = {PersistenceItTestConfiguration.class, WebMvcItTestConfiguration.class})
 @WebAppConfiguration
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,12 +50,30 @@ public class SalesOrderServiceIT {
         SalesOrder salesOrder = salesOrderService.getSalesOrder(100l);
 
         Assert.assertNotNull(salesOrder);
-        Assert.assertEquals(Long.valueOf(100),  salesOrder.getId());
-        Assert.assertEquals(Long.valueOf(1),  salesOrder.getVersion());
-        Assert.assertEquals("SalesOrder 0",  salesOrder.getDescription());
+        Assert.assertEquals(Long.valueOf(100), salesOrder.getId());
+        Assert.assertEquals(Long.valueOf(1), salesOrder.getVersion());
+        Assert.assertEquals("SalesOrder 0", salesOrder.getDescription());
         //Assert. "2016-08-01 12:00:00",  salesOrder.getDate());
-        Assert.assertEquals(new BigDecimal(10.00),  salesOrder.getTotal());
+        Assert.assertEquals(new BigDecimal(10.00), salesOrder.getTotal());
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetSalesOrderWithNullId() throws Exception {
+
+        SalesOrder salesOrder = salesOrderService.getSalesOrder(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteSalesOrderWithNullId() throws Exception {
+
+       salesOrderService.deleteSalesOrder(null);
+    }
+
+
+    @Test
+    public void testDeleteSalesOrderWithNonExistingId() throws Exception {
+
+        salesOrderService.deleteSalesOrder(null);
     }
 
 }

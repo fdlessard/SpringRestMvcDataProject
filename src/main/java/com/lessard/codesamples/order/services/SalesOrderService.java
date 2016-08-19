@@ -13,7 +13,7 @@ public interface SalesOrderService {
 
     Iterable<SalesOrder> getAllSalesOrder();
 
-    void delete(Long id);
+    void deleteSalesOrder(Long id);
 
-    void updateSalesOrder(SalesOrder salesOrder);
+    SalesOrder updateSalesOrder(SalesOrder salesOrder);
 }

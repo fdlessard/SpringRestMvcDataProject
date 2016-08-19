@@ -77,7 +77,7 @@ public class SalesOrderServiceImplTest {
     @Test
     public void testDeleteSalesOrder() throws Exception {
 
-        salesOrderService.delete(Long.valueOf(0));
+        salesOrderService.deleteSalesOrder(Long.valueOf(0));
         verify(salesOrderRepository).delete(Long.valueOf(0));
     }
 

@@ -40,29 +40,32 @@ public class SalesOrderController {
     }
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<String> hello() {
+    public String hello() {
 
-        return new ResponseEntity<String>("Hello World", HttpStatus.OK);
+        return "Hello World";
     }
 
     @RequestMapping(value = "/salesorders", method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<SalesOrder> createSalesOrder(@RequestBody SalesOrder salesOrder) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createSalesOrder(@RequestBody SalesOrder salesOrder) {
 
         salesOrderService.createSalesOrder(salesOrder);
-
-        return new ResponseEntity<SalesOrder>(salesOrder, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/salesorders/{id}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<SalesOrder> get(@PathVariable Long id) {
+    public SalesOrder get(@PathVariable Long id) {
 
         SalesOrder salesOrder = salesOrderService.getSalesOrder(id);
 
-        return new ResponseEntity<SalesOrder>(salesOrder, HttpStatus.OK);
+        if(salesOrder == null) {
+            throw new OrderNotFoundException(id);
+        }
+
+        return salesOrder;
     }
 
     @RequestMapping(value = "/salesorders", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Iterable<SalesOrder>> getAll() {
+    public List<SalesOrder> getAll() {
 
         Iterable<SalesOrder> salesOrders = salesOrderService.getAllSalesOrder();
 
@@ -70,28 +73,42 @@ public class SalesOrderController {
 
         List<SalesOrder> list = new ArrayList<SalesOrder>();
         iterator.forEachRemaining(list::add);
-        LOGGER .debug("SalesOrderController.getAll list size: " + list.size());
-        for (SalesOrder salesOrder: list) {
-            LOGGER .debug("SalesOrderController.getAll " + salesOrder);
-        }
 
-        return new ResponseEntity<Iterable<SalesOrder>>(salesOrders, HttpStatus.OK);
+        return list;
     }
 
     @RequestMapping(value = "/salesorders/{id}", method = RequestMethod.DELETE, produces = "application/json")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
 
-        salesOrderService.delete(id);
-
-        return new ResponseEntity(HttpStatus.OK);
+        salesOrderService.deleteSalesOrder(id);
     }
 
     @RequestMapping(value = "/salesorders", method = RequestMethod.PUT, produces = "application/json")
-    public ResponseEntity<SalesOrder> updateSalesOrder(@RequestBody SalesOrder salesOrder) {
+    public void updateSalesOrder(@RequestBody SalesOrder salesOrder) {
 
         salesOrderService.updateSalesOrder(salesOrder);
+    }
 
-        return new ResponseEntity<SalesOrder>(salesOrder, HttpStatus.OK);
+
+    // Exception handlers
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public @ResponseBody String orderNotFound(OrderNotFoundException e) {
+        Long orderId = e.getOrderId();
+        return "Order " + orderId + " not found !";
+    }
+
+    @ExceptionHandler(NumberFormatException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public @ResponseBody String orderNotFound(NumberFormatException e) {
+        return "Order not found !";
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public @ResponseBody String orderAlreadyExist(Exception e) {
+        return "Order already exist !";
     }
 
 }
