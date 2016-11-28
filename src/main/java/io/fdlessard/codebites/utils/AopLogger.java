@@ -20,7 +20,7 @@ public class AopLogger {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AopLogger.class);
 
-    @Around("execution(* com.lessard.codesamples..*.*(..))")
+    @Around("execution(* io.fdlessard.codebites..*.*(..))")
     public Object timeMethod(ProceedingJoinPoint joinPoint) throws Throwable {
 
         StopWatch stopWatch = new StopWatch();
@@ -30,7 +30,7 @@ public class AopLogger {
 
         stopWatch.stop();
 
-        StringBuffer logMessage = new StringBuffer();
+        StringBuilder logMessage = new StringBuilder();
         logMessage.append(joinPoint.getTarget().getClass().getSimpleName());
         logMessage.append(".");
         logMessage.append(joinPoint.getSignature().getName());

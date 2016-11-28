@@ -24,7 +24,7 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories("com.lessard.codesamples.order.repositories")
+@EnableJpaRepositories("io.fdlessard.codebites.order.repositories")
 public class PersistenceConfiguration {
 
 
