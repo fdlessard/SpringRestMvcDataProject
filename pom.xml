@@ -2,9 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.lessard.codesamples</groupId>
-    <artifactId>RestSpringMvcDataApp</artifactId>
-    <name>RestSpringMvcDataApp</name>
+    <groupId>io.fdlessard.codebites</groupId>
+    <artifactId>SpringRestMvcDataApp</artifactId>
+    <name>SpringRestMvcDataApp</name>
     <description></description>
     <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
